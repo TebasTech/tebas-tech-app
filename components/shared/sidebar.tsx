@@ -1,91 +1,32 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
 import {
-	LayoutDashboard,
 	Store,
-	Package,
 	Boxes,
+	Package,
 	Users,
 	ShoppingCart,
 	Receipt,
 	Megaphone,
 	BarChart3,
 	HelpCircle,
-	ChevronLeft,
-	ChevronRight,
+	LayoutDashboard,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-const sidebarGroups = [
-	{
-		title: "Geral",
-		items: [
-			{
-				title: "Visão Geral",
-				href: "/dashboard",
-				icon: LayoutDashboard,
-			},
-		],
-	},
-	{
-		title: "Operação",
-		items: [
-			{
-				title: "Loja",
-				href: "/dashboard/loja",
-				icon: Store,
-			},
-			{
-				title: "Estoque",
-				href: "/dashboard/estoque",
-				icon: Boxes,
-			},
-			{
-				title: "Produtos",
-				href: "/dashboard/produtos",
-				icon: Package,
-			},
-			{
-				title: "Clientes",
-				href: "/dashboard/clientes",
-				icon: Users,
-			},
-			{
-				title: "Vendas",
-				href: "/dashboard/vendas",
-				icon: ShoppingCart,
-			},
-			{
-				title: "Compras e Despesas",
-				href: "/dashboard/financeiro",
-				icon: Receipt,
-			},
-		],
-	},
-	{
-		title: "Crescimento",
-		items: [
-			{
-				title: "Marketing",
-				href: "/dashboard/marketing",
-				icon: Megaphone,
-			},
-			{
-				title: "Estatísticas",
-				href: "/dashboard/estatisticas",
-				icon: BarChart3,
-			},
-			{
-				title: "Ajuda",
-				href: "/dashboard/ajuda",
-				icon: HelpCircle,
-			},
-		],
-	},
+const menu = [
+	{ title: "Loja", href: "/dashboard/loja", icon: Store },
+	{ title: "Estoque", href: "/dashboard/estoque", icon: Boxes },
+	{ title: "Cadastro", href: "/dashboard/cadastro", icon: Package },
+	{ title: "Clientes", href: "/dashboard/clientes", icon: Users },
+	{ title: "Venda", href: "/dashboard/venda", icon: ShoppingCart },
+	{ title: "Compra", href: "/dashboard/compra", icon: Receipt },
+	{ title: "Marketing", href: "/dashboard/marketing", icon: Megaphone },
+	{ title: "Estatísticas", href: "/dashboard/estatisticas", icon: BarChart3 },
+	{ title: "Ajuda", href: "/dashboard/ajuda", icon: HelpCircle },
 ];
 
 interface SidebarProps {
@@ -94,107 +35,64 @@ interface SidebarProps {
 
 export function Sidebar({ onMobileClose }: SidebarProps) {
 	const pathname = usePathname();
-	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	const handleLinkClick = () => {
 		if (onMobileClose) onMobileClose();
 	};
 
 	return (
-		<div
-			className={cn(
-				"flex h-full flex-col border-r bg-card shadow-sm transition-all duration-300",
-				isCollapsed ? "w-16" : "w-72",
-			)}
-		>
-			{/* Logo */}
-			<div className="flex h-16 items-center border-b px-6 justify-between">
-				{!isCollapsed && (
-					<Link href="/dashboard" className="flex items-center gap-3 group">
-						<div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-							<LayoutDashboard className="w-4 h-4 text-primary-foreground" />
-						</div>
-						<div className="leading-tight">
-							<div className="text-base font-bold group-hover:text-primary transition-colors">
-								Tebas
-							</div>
-							<div className="text-xs text-muted-foreground -mt-0.5">
-								Tech
-							</div>
-						</div>
-					</Link>
-				)}
+		<aside className="h-screen w-72 bg-[hsl(var(--sidebar-background))] text-white flex flex-col border-r border-white/10">
+			{/* TOPO / LOGO */}
+			<div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+				<div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden">
+					<Image
+						src="/logo-sem-fundo.png"
+						alt="Tebas Tech"
+						width={40}
+						height={40}
+						priority
+					/>
+				</div>
 
-				{isCollapsed && (
-					<div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center mx-auto">
-						<LayoutDashboard className="w-4 h-4 text-primary-foreground" />
-					</div>
-				)}
+				<div className="flex flex-col leading-tight">
+					<span className="font-bold text-lg">Tebas</span>
+					<span className="text-xs opacity-70 -mt-0.5">Tech</span>
+				</div>
 
-				<Button
-					variant="ghost"
-					size="icon"
-					className="h-8 w-8 hover:bg-muted"
-					onClick={() => setIsCollapsed(!isCollapsed)}
-				>
-					{isCollapsed ? (
-						<ChevronRight className="h-4 w-4" />
-					) : (
-						<ChevronLeft className="h-4 w-4" />
-					)}
-				</Button>
+				<div className="ml-auto opacity-70">
+					<LayoutDashboard size={18} />
+				</div>
 			</div>
 
-			{/* Navigation Groups */}
-			<nav className="flex-1 space-y-8 p-6">
-				{sidebarGroups.map((group) => (
-					<div key={group.title} className="space-y-3">
-						{/* Group Title */}
-						{!isCollapsed && (
-							<h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-4">
-								{group.title}
-							</h3>
-						)}
+			{/* MENU */}
+			<nav className="flex-1 px-3 py-4 space-y-2">
+				{menu.map((item) => {
+					const Icon = item.icon;
+					const active = pathname === item.href;
 
-						{/* Group Items */}
-						<div className="space-y-2">
-							{group.items.map((item) => {
-								const isActive = pathname === item.href;
-								const Icon = item.icon;
-
-								return (
-									<Link
-										key={item.href}
-										href={item.href}
-										onClick={handleLinkClick}
-										className={cn(
-											"group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-all duration-200 hover:bg-muted",
-											isActive
-												? "bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
-												: "text-muted-foreground hover:text-foreground",
-											isCollapsed && "justify-center px-3 py-4",
-										)}
-										title={isCollapsed ? item.title : undefined}
-									>
-										<Icon
-											className={cn(
-												"transition-all duration-200",
-												isCollapsed ? "h-5 w-5" : "h-4 w-4",
-												isActive && !isCollapsed && "text-primary-foreground",
-											)}
-										/>
-										{!isCollapsed && (
-											<span className="group-hover:translate-x-0.5 transition-transform duration-200">
-												{item.title}
-											</span>
-										)}
-									</Link>
-								);
-							})}
-						</div>
-					</div>
-				))}
+					return (
+						<Link
+							key={item.href}
+							href={item.href}
+							onClick={handleLinkClick}
+							className={cn(
+								"flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all",
+								active
+									? "bg-[hsl(var(--sidebar-accent))] text-white font-semibold shadow"
+									: "text-white/80 hover:bg-white/10 hover:text-white",
+							)}
+						>
+							<Icon size={18} />
+							{item.title}
+						</Link>
+					);
+				})}
 			</nav>
-		</div>
+
+			{/* RODAPÉ */}
+			<div className="p-4 text-xs text-white/60 border-t border-white/10">
+				Tebas Tech © {new Date().getFullYear()}
+			</div>
+		</aside>
 	);
 }
