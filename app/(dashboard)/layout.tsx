@@ -1,25 +1,20 @@
-"use client";
-import { Sidebar } from "@/components/shared/sidebar";
-import { Topbar } from "@/components/shared/topbar";
+"use client"
+
+import Sidebar from "@/components/shared/sidebar"
+import Topbar from "@/components/shared/topbar"
 
 export default function DashboardLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode
 }) {
-
-	return (
-		<div className="relative flex h-screen overflow-hidden bg-background">
-			{/* Sidebar */}
-			<Sidebar />
-
-			{/* Main Content */}
-			<div className="flex-1 overflow-auto">
-				<Topbar />
-				<main className="p-8 max-w-[calc(100vw-18rem)] mx-auto">
-					<div className="min-h-[calc(100vh-8rem)]">{children}</div>
-				</main>
-			</div>
-		</div>
-	);
+  return (
+    <div className="flex h-screen bg-background">
+      <Sidebar />
+      <div className="flex flex-col flex-1">
+        <Topbar />
+        <main className="p-6 overflow-auto">{children}</main>
+      </div>
+    </div>
+  )
 }
