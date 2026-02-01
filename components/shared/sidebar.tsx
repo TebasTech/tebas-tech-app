@@ -3,96 +3,95 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+
 import {
-	Store,
-	Boxes,
-	Package,
-	Users,
-	ShoppingCart,
-	Receipt,
-	Megaphone,
-	BarChart3,
-	HelpCircle,
-	LayoutDashboard,
+  LayoutDashboard,
+  Store,
+  Boxes,
+  Users,
+  ShoppingCart,
+  BarChart3,
+  Megaphone,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const menu = [
-	{ title: "Loja", href: "/dashboard/loja", icon: Store },
-	{ title: "Estoque", href: "/dashboard/estoque", icon: Boxes },
-	{ title: "Cadastro", href: "/dashboard/cadastro", icon: Package },
-	{ title: "Clientes", href: "/dashboard/clientes", icon: Users },
-	{ title: "Venda", href: "/dashboard/venda", icon: ShoppingCart },
-	{ title: "Compra", href: "/dashboard/compra", icon: Receipt },
-	{ title: "Marketing", href: "/dashboard/marketing", icon: Megaphone },
-	{ title: "Estatísticas", href: "/dashboard/estatisticas", icon: BarChart3 },
-	{ title: "Ajuda", href: "/dashboard/ajuda", icon: HelpCircle },
+  {
+    title: "GERAL",
+    items: [
+      { label: "Visão Geral", href: "/dashboard", icon: LayoutDashboard },
+    ],
+  },
+  {
+    title: "OPERAÇÃO",
+    items: [
+      { label: "Loja", href: "/dashboard/store", icon: Store },
+      { label: "Estoque", href: "/dashboard/database", icon: Boxes },
+      { label: "Produtos", href: "/dashboard/projects", icon: Boxes },
+      { label: "Clientes", href: "/dashboard/users", icon: Users },
+      { label: "Vendas", href: "/dashboard/messages", icon: ShoppingCart },
+    ],
+  },
+  {
+    title: "CRESCIMENTO",
+    items: [
+      { label: "Marketing", href: "/dashboard/help", icon: Megaphone },
+      { label: "Estatísticas", href: "/dashboard/analytics", icon: BarChart3 },
+    ],
+  },
 ];
 
-interface SidebarProps {
-	onMobileClose?: () => void;
-}
+export default function Sidebar() {
+  const pathname = usePathname();
 
-export function Sidebar({ onMobileClose }: SidebarProps) {
-	const pathname = usePathname();
+  return (
+    <aside className="w-64 min-h-screen bg-white border-r flex flex-col">
+      {/* LOGO */}
+      <div className="p-6 border-b flex items-center gap-3">
+        <Image
+          src="/logo-sem-fundo.png"
+          alt="Tebas Tech"
+          width={40}
+          height={40}
+        />
+        <div className="leading-tight">
+          <p className="font-bold text-lg text-slate-900">Tebas</p>
+          <p className="text-xs text-blue-600 font-semibold">Tech</p>
+        </div>
+      </div>
 
-	const handleLinkClick = () => {
-		if (onMobileClose) onMobileClose();
-	};
+      {/* MENU */}
+      <nav className="flex-1 p-4 space-y-6">
+        {menu.map((group) => (
+          <div key={group.title}>
+            <p className="text-xs text-slate-400 font-semibold mb-3">
+              {group.title}
+            </p>
 
-	return (
-		<aside className="h-screen w-72 bg-[hsl(var(--sidebar-background))] text-white flex flex-col border-r border-white/10">
-			{/* TOPO / LOGO */}
-			<div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-				<div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden">
-					<Image
-						src="/logo-sem-fundo.png"
-						alt="Tebas Tech"
-						width={40}
-						height={40}
-						priority
-					/>
-				</div>
+            <div className="space-y-1">
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                const active = pathname === item.href;
 
-				<div className="flex flex-col leading-tight">
-					<span className="font-bold text-lg">Tebas</span>
-					<span className="text-xs opacity-70 -mt-0.5">Tech</span>
-				</div>
-
-				<div className="ml-auto opacity-70">
-					<LayoutDashboard size={18} />
-				</div>
-			</div>
-
-			{/* MENU */}
-			<nav className="flex-1 px-3 py-4 space-y-2">
-				{menu.map((item) => {
-					const Icon = item.icon;
-					const active = pathname === item.href;
-
-					return (
-						<Link
-							key={item.href}
-							href={item.href}
-							onClick={handleLinkClick}
-							className={cn(
-								"flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all",
-								active
-									? "bg-[hsl(var(--sidebar-accent))] text-white font-semibold shadow"
-									: "text-white/80 hover:bg-white/10 hover:text-white",
-							)}
-						>
-							<Icon size={18} />
-							{item.title}
-						</Link>
-					);
-				})}
-			</nav>
-
-			{/* RODAPÉ */}
-			<div className="p-4 text-xs text-white/60 border-t border-white/10">
-				Tebas Tech © {new Date().getFullYear()}
-			</div>
-		</aside>
-	);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition
+                      ${
+                        active
+                          ? "bg-blue-600 text-white"
+                          : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                      }`}
+                  >
+                    <Icon size={18} />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </nav>
+    </aside>
+  );
 }
