@@ -1,118 +1,88 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
 	LayoutDashboard,
-	Settings,
+	Store,
+	Package,
+	Boxes,
 	Users,
+	ShoppingCart,
+	Receipt,
+	Megaphone,
 	BarChart3,
-	FolderKanban,
+	HelpCircle,
 	ChevronLeft,
 	ChevronRight,
-	FileText,
-	Calendar,
-	Database,
-	MessageSquare,
-	Shield,
-	HelpCircle,
-	LogIn,
-	AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const sidebarGroups = [
 	{
-		title: "General",
+		title: "Geral",
 		items: [
 			{
-				title: "Dashboard",
+				title: "Visão Geral",
 				href: "/dashboard",
 				icon: LayoutDashboard,
-				badge: null,
-			},
-			{
-				title: "Analytics",
-				href: "/dashboard/analytics",
-				icon: BarChart3,
-				badge: "New",
-			},
-			{
-				title: "Settings",
-				href: "/dashboard/settings",
-				icon: Settings,
-				badge: null,
 			},
 		],
 	},
 	{
-		title: "Pages",
+		title: "Operação",
 		items: [
 			{
-				title: "Users",
-				href: "/dashboard/users",
+				title: "Loja",
+				href: "/dashboard/loja",
+				icon: Store,
+			},
+			{
+				title: "Estoque",
+				href: "/dashboard/estoque",
+				icon: Boxes,
+			},
+			{
+				title: "Produtos",
+				href: "/dashboard/produtos",
+				icon: Package,
+			},
+			{
+				title: "Clientes",
+				href: "/dashboard/clientes",
 				icon: Users,
-				badge: "12",
 			},
 			{
-				title: "Projects",
-				href: "/dashboard/projects",
-				icon: FolderKanban,
-				badge: null,
+				title: "Vendas",
+				href: "/dashboard/vendas",
+				icon: ShoppingCart,
 			},
 			{
-				title: "Documents",
-				href: "/dashboard/documents",
-				icon: FileText,
-				badge: null,
-			},
-			{
-				title: "Calendar",
-				href: "/dashboard/calendar",
-				icon: Calendar,
-				badge: "3",
-			},
-			{
-				title: "Auth Pages",
-				href: "/dashboard/auth",
-				icon: LogIn,
-				badge: null,
-			},
-			{
-				title: "Error Pages",
-				href: "/dashboard/errors",
-				icon: AlertCircle,
-				badge: null,
+				title: "Compras e Despesas",
+				href: "/dashboard/financeiro",
+				icon: Receipt,
 			},
 		],
 	},
 	{
-		title: "Others",
+		title: "Crescimento",
 		items: [
 			{
-				title: "Messages",
-				href: "/dashboard/messages",
-				icon: MessageSquare,
-				badge: "5",
+				title: "Marketing",
+				href: "/dashboard/marketing",
+				icon: Megaphone,
 			},
 			{
-				title: "Database",
-				href: "/dashboard/database",
-				icon: Database,
-				badge: null,
+				title: "Estatísticas",
+				href: "/dashboard/estatisticas",
+				icon: BarChart3,
 			},
 			{
-				title: "Security",
-				href: "/dashboard/security",
-				icon: Shield,
-				badge: "!",
-			},
-			{
-				title: "Help",
-				href: "/dashboard/help",
+				title: "Ajuda",
+				href: "/dashboard/ajuda",
 				icon: HelpCircle,
-				badge: null,
 			},
 		],
 	},
@@ -127,9 +97,7 @@ export function Sidebar({ onMobileClose }: SidebarProps) {
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	const handleLinkClick = () => {
-		if (onMobileClose) {
-			onMobileClose();
-		}
+		if (onMobileClose) onMobileClose();
 	};
 
 	return (
@@ -143,19 +111,26 @@ export function Sidebar({ onMobileClose }: SidebarProps) {
 			<div className="flex h-16 items-center border-b px-6 justify-between">
 				{!isCollapsed && (
 					<Link href="/dashboard" className="flex items-center gap-3 group">
-						<div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+						<div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
 							<LayoutDashboard className="w-4 h-4 text-primary-foreground" />
 						</div>
-						<span className="text-xl font-bold group-hover:text-primary transition-colors">
-							Dashboard
-						</span>
+						<div className="leading-tight">
+							<div className="text-base font-bold group-hover:text-primary transition-colors">
+								Tebas
+							</div>
+							<div className="text-xs text-muted-foreground -mt-0.5">
+								Tech
+							</div>
+						</div>
 					</Link>
 				)}
+
 				{isCollapsed && (
-					<div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mx-auto">
+					<div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center mx-auto">
 						<LayoutDashboard className="w-4 h-4 text-primary-foreground" />
 					</div>
 				)}
+
 				<Button
 					variant="ghost"
 					size="icon"
